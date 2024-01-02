@@ -11,7 +11,7 @@ class SignActivation(ActivationFunction):
          This is the output function.
          TODO: Define the correct return function, given input `x`
       """
-      
+      a = 1
    def gradient(self, x):
       """
             Function derivative.
