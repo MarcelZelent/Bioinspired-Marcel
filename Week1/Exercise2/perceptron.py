@@ -74,29 +74,3 @@ class Perceptron:
       """
       return self.f.gradient(a)
 
-if __name__ == '__main__':
-   data = np.array( [ [0.5, 0.5, 0], [1.0, 0, 0], [2.0, 3.0, 0], [0, 1.0, 1], [0, 2.0, 1], [1.0, 2.2, 1] ] )
-   xdata = data[:,:2]
-   ydata = data[:,2]
-   print(xdata)
-   print(ydata)
-   
-## TODO Test your activation function
-a = 
-print(a.forward(2))
-"print(a.forward(0))"
-
-## TODO Test perceptron initialization
-p = 
-print(p.predict(xdata[0,:]) )
-
-## TODO Learn the weights
-r = 0.1 # learning rate
-## calculate the error and update the weights
-print(p.w)
-## TODO plot points and linear decision boundary
-
-plt.plot(xp,yp, 'k--')
-plt.xlabel('x1')
-plt.ylabel('x2')
-plt.show()
