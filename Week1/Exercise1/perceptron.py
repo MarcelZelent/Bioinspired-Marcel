@@ -128,11 +128,5 @@ plt.xlim([-1, 4])
 plt.ylim([-1, 4])
 plt.show()
 
-# make a quadratic equation and draw it
-x = np.linspace(-10, 10, 100)
-y = x**2 + 2*x + 1
-plt.plot(x, y)
-plt.show()
 
-print("Done!")
 
