@@ -127,9 +127,3 @@ plt.ylabel('x2')
 plt.xlim([-1, 4])
 plt.ylim([-1, 4])
 plt.show()
-
-print("hello")
-
-print("hello")
-
-print("hello")
