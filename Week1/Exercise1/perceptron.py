@@ -41,9 +41,12 @@ class Perceptron:
       if not isinstance(act_f, type) or not issubclass(act_f, ActivationFunction):
          raise TypeError('act_f has to be a subclass of ActivationFunction (not a class instance).')
       # weights
-      self.w = #np.random.normal(mean, standard deviation, size)
+      mean = 0
+      standard_deviation = 1
+      self.w = np.random.normal(mean, standard_deviation, n_inputs)
+      self.w_bias = np.random.normal(mean, standard_deviation, 1)
       # activation function
-      self.f =
+      self.f = act_f()
 
       if self.f is not None and not isinstance(self.f, ActivationFunction):
          raise TypeError("self.f should be a class instance.")
@@ -54,7 +57,7 @@ class Perceptron:
          TODO: Fill in the function to provide the correct output
          NB: Remember the bias
       """
-      a = 
+      a = np.dot(self.w, x) + self.w_bias
       return a
 
    def output(self, a):
@@ -62,7 +65,7 @@ class Perceptron:
          It computes the neuron output `y`, given the activation `a`
          TODO: Fill in the function to provide the correct output
       """
-      y = 
+      y = self.f.forward(a)
       return y
 
    def predict(self, x):
@@ -70,6 +73,7 @@ class Perceptron:
          It computes the neuron output `y`, given the input `x`
          TODO: Fill in the function to provide the correct output
       """
+
       return None
 
    def gradient(self, a):
@@ -86,21 +90,39 @@ if __name__ == '__main__':
    print(ydata)
    
 ## TODO Test your activation function
-a = 
+a = SignActivation()
 print(a.forward(2))
-"print(a.forward(0))"
+print(a.forward(0))
 
 ## TODO Test perceptron initialization
-p = 
+p = Perceptron(1, SignActivation)
 print(p.predict(xdata[0,:]) )
 
 ## TODO Learn the weights
 r = 0.1 # learning rate
 ## calculate the error and update the weights
+epochs = 100
+for i in range(epochs):
+   count = 0
+   for j in xdata:
+      a = p.activation(j)
+      y = p.output(a)
+      error = ydata[count] - y
+      p.w = p.w + r*error*j
+      p.w_bias = p.w_bias + r*error
+      count += 1
 print(p.w)
 ## TODO plot points and linear decision boundary
+
+# PLOT THE xdata POINTS
+plt.plot(xdata[:,0],xdata[:,1],'bo')
+
+# PLOT THE DECISION BOUNDARY
+xp = np.linspace(0,2,100)
+yp = -p.w[0]/p.w[1]*xp - p.w_bias/p.w[1]
 
 plt.plot(xp,yp, 'k--')
 plt.xlabel('x1')
 plt.ylabel('x2')
 plt.show()
+
