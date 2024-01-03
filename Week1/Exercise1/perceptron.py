@@ -128,5 +128,7 @@ plt.xlim([-1, 4])
 plt.ylim([-1, 4])
 plt.show()
 
+print("hello")
+
 
 
