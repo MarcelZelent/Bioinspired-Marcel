@@ -124,5 +124,13 @@ yp = -p.w[0]/p.w[1]*xp - p.w_bias/p.w[1]
 plt.plot(xp,yp, 'k--')
 plt.xlabel('x1')
 plt.ylabel('x2')
+plt.xlim([-1, 4])
+plt.ylim([-1, 4])
+plt.show()
+
+# make a quadratic equation and draw it
+x = np.linspace(-10, 10, 100)
+y = x**2 + 2*x + 1
+plt.plot(x, y)
 plt.show()
 
