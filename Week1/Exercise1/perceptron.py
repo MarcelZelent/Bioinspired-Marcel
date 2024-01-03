@@ -73,8 +73,8 @@ class Perceptron:
          It computes the neuron output `y`, given the input `x`
          TODO: Fill in the function to provide the correct output
       """
-
-      return None
+      prediction = self.output(self.activation(x))
+      return prediction
 
    def gradient(self, a):
       """
@@ -95,13 +95,13 @@ print(a.forward(2))
 print(a.forward(0))
 
 ## TODO Test perceptron initialization
-p = Perceptron(1, SignActivation)
+p = Perceptron(2, SignActivation)
 print(p.predict(xdata[0,:]) )
 
 ## TODO Learn the weights
 r = 0.1 # learning rate
 ## calculate the error and update the weights
-epochs = 100
+epochs = 1000
 for i in range(epochs):
    count = 0
    for j in xdata:
