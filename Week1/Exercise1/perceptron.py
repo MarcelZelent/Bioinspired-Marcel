@@ -134,3 +134,5 @@ y = x**2 + 2*x + 1
 plt.plot(x, y)
 plt.show()
 
+print("Done!")
+
