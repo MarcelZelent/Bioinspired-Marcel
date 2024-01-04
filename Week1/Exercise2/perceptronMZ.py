@@ -11,6 +11,10 @@ class SignActivation(ActivationFunction):
          This is the output function.
          TODO: Define the correct return function, given input `x`
       """
+      if x > 0:
+         return 1
+      else:
+         return 0
       
    def gradient(self, x):
       """
@@ -37,9 +41,9 @@ class Perceptron:
       if not isinstance(act_f, type) or not issubclass(act_f, ActivationFunction):
          raise TypeError('act_f has to be a subclass of ActivationFunction (not a class instance).')
       # weights
-      self.w = #np.random.normal(mean, standard deviation, size)
+      self.w = np.random.normal(0, 1, (n_inputs+1,))
       # activation function
-      self.f =
+      self.f = act_f()
 
       if self.f is not None and not isinstance(self.f, ActivationFunction):
          raise TypeError("self.f should be a class instance.")
@@ -50,7 +54,7 @@ class Perceptron:
          TODO: Fill in the function to provide the correct output
          NB: Remember the bias
       """
-      a = 
+      a = np.dot(self.w.T, x)
       return a
 
    def output(self, a):
@@ -58,7 +62,7 @@ class Perceptron:
          It computes the neuron output `y`, given the activation `a`
          TODO: Fill in the function to provide the correct output
       """
-      y = 
+      y = self.f.forward(a)
       return y
 
    def predict(self, x):
@@ -66,7 +70,9 @@ class Perceptron:
          It computes the neuron output `y`, given the input `x`
          TODO: Fill in the function to provide the correct output
       """
-      return None
+      a = self.activation(x)
+      y_out = self.output(a)
+      return y_out
 
    def gradient(self, a):
       """
