@@ -1,5 +1,5 @@
 import numpy as np
-from activation import ActivationFunction
+from activationMZ import ActivationFunction
 import matplotlib.pyplot as plt
 
 class SignActivation(ActivationFunction):
@@ -23,7 +23,7 @@ class Perceptron:
    """ 
       Perceptron neuron model
       Parameters
-      ----------s
+      ----------
       n_inputs : int
          Number of inputs
       act_f : Subclass of `ActivationFunction`
