@@ -51,8 +51,9 @@ class Layer:
          Initialize the layer, creating `num_units` perceptrons with `num_inputs` each. 
       """
       # TODO Create the perceptrons required for the layer
+      self.num_units = num_units
       self.ps = []
-      for i in range(self.num_units):
+      for i in range(num_units):
          self.ps.append(Perceptron(num_inputs, act_f))
 
    def activation(self, x):
@@ -78,7 +79,7 @@ class Layer:
       """
       for i in range(self.num_units):
          self.ps[i].w += dw[:,i]
-
+      
    @property
    def w(self):
       """
@@ -169,7 +170,6 @@ class MLP:
          # Update weights
       self.l1.update_weights(weight_deltas_sum)
       #self.l1.w += np.array(weight_deltas)
-      return None # remove this line
 
    def export_weights(self):
       return [self.l1.w, self.l2.w]

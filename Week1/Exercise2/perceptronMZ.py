@@ -45,6 +45,7 @@ class Perceptron:
       # weights
       np.random.seed(42)
       self.w = np.random.normal(0, 1, (n_inputs))
+      self.bias = np.random.normal(0, 1, 1)
       # activation function
       self.f = act_f()
 
@@ -57,7 +58,7 @@ class Perceptron:
          TODO: Fill in the function to provide the correct output
          NB: Remember the bias
       """
-      a = np.dot(self.w.T, x)
+      a = np.dot(self.w.T, x)+self.bias
       return a
 
    def output(self, a):
