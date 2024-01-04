@@ -119,15 +119,16 @@ class MLP:
 
       # TODO: Define a hidden layer and the output layer
       self.l1 = Layer(self.num_inputs, self.n_hidden_units, Sigmoid) # hidden layer 1
-      self.l_out = Layer(self.n_hidden_units, 1, LinearActivation) # output layer
+      self.l_out = Layer(self.n_hidden_units, self.n_outputs, LinearActivation) # output layer
 
    def predict(self, x):
       """ 
       Forward pass prediction given the input x
       TODO: Write the function
       """
-      
-      return None
+      forward_pass_pred = self.l_out.predict(self.l1.predict(x))
+
+      return forward_pass_pred
 
    def train(self, inputs, outputs):
       """
@@ -190,7 +191,7 @@ if __name__ == "__main__":
 
    # TODO: Test Layer class init
    num_of_inputs = 2
-   num_of_units = 5
+   num_of_units = 3
    activation_used = Sigmoid
    layer_test = Layer(num_of_inputs, num_of_units, activation_used)
 
@@ -214,13 +215,22 @@ if __name__ == "__main__":
 
 
    # TODO: Test MLP class init
+   num_of_inputs = 2
+   num_of_hidden_units = 3
+   num_of_outputs = 1
+   print(test_inputs)
 
+   mlp_test = MLP(num_of_inputs, num_of_hidden_units, num_of_outputs)
+   mlp_test.predict(test_inputs.T)
+   print("Test MLP predict: ", mlp_test.predict(test_inputs.T))
+   print(mlp_test.l1.w)
+   print(mlp_test.l_out.w)
 
    # TODO: Training data
 
 
    # TODO: Initialization
-
+   a = 1
 
    # TODO: Write a for loop to train the network for a number of iterations. Make plots.
    pass

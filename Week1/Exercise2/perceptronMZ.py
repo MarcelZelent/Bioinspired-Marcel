@@ -2,6 +2,8 @@ import numpy as np
 from activationMZ import ActivationFunction
 import matplotlib.pyplot as plt
 
+
+
 class SignActivation(ActivationFunction):
    """ 
          Sign activation: `f(x) = 1 if x > 0, 0 if x <= 0`
@@ -41,7 +43,8 @@ class Perceptron:
       if not isinstance(act_f, type) or not issubclass(act_f, ActivationFunction):
          raise TypeError('act_f has to be a subclass of ActivationFunction (not a class instance).')
       # weights
-      self.w = np.random.normal(0, 1, (n_inputs+1,))
+      np.random.seed(42)
+      self.w = np.random.normal(0, 1, (n_inputs))
       # activation function
       self.f = act_f()
 
