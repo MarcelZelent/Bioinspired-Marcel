@@ -143,17 +143,24 @@ class MLP:
 
       TODO: Write the function to iterate through training examples and apply gradient descent to update the neuron weights
       """
-
+      weight_deltas = []
       # Loop over training examples
-
+      for i in range(inputs.shape[0]):
          # Forward pass
-
+         act_first_lay = self.l1.activation(inputs[i])
+         out_first_lay = self.l1.output(act_first_lay)
+         act_second_lay = self.l_out.activation(out_first_lay)
+         out_second_lay = self.l_out.output(act_second_lay)
 
          # Backpropagation
-
-
+         predictions = out_second_lay
+         delta_out = (predictions - outputs[i])*self.l_out.gradient(act_second_lay)
+         delta1 = self.gradient(act_first_lay)*np.dot(self.l_out.w[1:,:], delta_out)
+         weight_change_second = -self.alpha*np.dot(delta1, out_first_lay)
+         weight_change_first = -self.alpha*np.dot(delta_out, out_first_lay)
+         weight_deltas.append(weight_change)
          # Add weight change contributions to temporary array
-      o0 = np.insert(inp, 0, 1)
+      o0 = np.insert(o0, 0, 1)
       o1 = np.insert(o1, 0, 1)
 
       dw1 += delta1.reshape(-1,1).dot(o0.reshape(1,-1))
@@ -177,7 +184,9 @@ class MLP:
 def calc_prediction_error(model, x, t):
    """ Calculate the average prediction error """
    # TODO Write the function
-   return None
+   error = t - model.predict(x.T)
+   mse = np.mean(error**2)
+   return mse
 
 if __name__ == "__main__":
    # TODO: Test new activation functions
@@ -225,6 +234,28 @@ if __name__ == "__main__":
    print("Test MLP predict: ", mlp_test.predict(test_inputs.T))
    print(mlp_test.l1.w)
    print(mlp_test.l_out.w)
+
+   # Testing the calc error function
+   test_data = np.array([[1, 1, 3], [2, 2, 4], [3, 3, 5], [4, 4, 6], [5, 5, 7]])
+   test_data_x = test_data[:,0:2]
+   test_data_y = test_data[:,2]
+   test_data_x_dims = test_data_x.shape
+   test_data_x = np.append(np.ones((test_data_x_dims[0],1)), test_data_x, axis=1)
+   test_data_x_dims = test_data_x.shape
+
+   num_of_inputs = test_data_x_dims[1]
+   num_of_hidden_units = 3
+   num_of_outputs = 1
+
+   mlp_data_test = MLP(num_of_inputs, num_of_hidden_units, num_of_outputs)
+   print("Test data: ", test_data)
+   print("Test data x: ", test_data_x)
+   print("Test data y: ", test_data_y)
+
+   data_test_predictions = mlp_data_test.predict(test_data_x.T)
+   print("Test data predictions: ", data_test_predictions)
+   mse_result = calc_prediction_error(mlp_data_test, test_data_x, test_data_y)
+   print(f'MSE: {mse_result}')
 
    # TODO: Training data
 
