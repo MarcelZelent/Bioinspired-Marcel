@@ -52,6 +52,8 @@ class Layer:
       """
       # TODO Create the perceptrons required for the layer
       self.ps = []
+      for i in range(num_units):
+         self.ps.append(Perceptron(num_inputs, act_f))
 
    def activation(self, x):
       """ Returns the activation `a` of all perceptrons in the layer, given the input vector`x`. """
@@ -116,14 +118,15 @@ class MLP:
       self.alpha = alpha
 
       # TODO: Define a hidden layer and the output layer
-      self.l1 = None # hidden layer 1
-      self.l_out = None # output layer
+      self.l1 = Layer(self.num_inputs, self.n_hidden_units, Sigmoid) # hidden layer 1
+      self.l_out = Layer(self.n_hidden_units, 1, LinearActivation) # output layer
 
    def predict(self, x):
       """ 
       Forward pass prediction given the input x
       TODO: Write the function
       """
+      
       return None
 
    def train(self, inputs, outputs):
@@ -177,9 +180,37 @@ def calc_prediction_error(model, x, t):
 
 if __name__ == "__main__":
    # TODO: Test new activation functions
+   sigmoid_test = Sigmoid()
+   print(sigmoid_test.forward(2))
+   print(sigmoid_test.forward(0))
 
+   linear_test = LinearActivation()
+   print(linear_test.forward(2))
+   print(linear_test.forward(0))
 
    # TODO: Test Layer class init
+   num_of_inputs = 2
+   num_of_units = 5
+   activation_used = Sigmoid
+   layer_test = Layer(num_of_inputs, num_of_units, activation_used)
+
+   test_inputs = np.array([[np.pi, 1.0]])
+   test_dims = test_inputs.shape
+   test_inputs = np.append(np.ones((test_dims[0],1)), test_inputs, axis=1)
+   test_dims = test_inputs.shape
+   test_activation = layer_test.activation(test_inputs.T)
+   test_output = layer_test.output(test_activation)
+   test_predict = layer_test.predict(test_inputs.T)
+   test_gradient = layer_test.gradient(test_activation)
+   test_weights = layer_test.w
+
+   print("Test inputs: ", test_inputs)
+   print("Test dimensions: ", test_dims)
+   print("Test activation: ", test_activation)
+   print("Test output: ", test_output)
+   print("Test predict: ", test_predict)
+   print("Test gradient: ", test_gradient)
+   print("Test weights: ", test_weights)
 
 
    # TODO: Test MLP class init
