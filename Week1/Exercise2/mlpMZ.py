@@ -190,8 +190,8 @@ if __name__ == "__main__":
    print(linear_test.forward(0))
 
    # TODO: Test Layer class init
-   num_of_inputs = 2
-   num_of_units = 3
+   num_of_inputs = 3
+   num_of_units = 5
    activation_used = Sigmoid
    layer_test = Layer(num_of_inputs, num_of_units, activation_used)
 
@@ -215,7 +215,7 @@ if __name__ == "__main__":
 
 
    # TODO: Test MLP class init
-   num_of_inputs = 2
+   num_of_inputs = 2+1
    num_of_hidden_units = 3
    num_of_outputs = 1
    print(test_inputs)
