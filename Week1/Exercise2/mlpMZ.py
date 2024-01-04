@@ -1,6 +1,6 @@
 import numpy as np
 
-from perceptronMZ import Perceptron
+from perceptronMZ import Perceptron, SignActivation
 from activationMZ import ActivationFunction
 
 class Sigmoid(ActivationFunction):
@@ -52,7 +52,7 @@ class Layer:
       """
       # TODO Create the perceptrons required for the layer
       self.ps = []
-      for i in range(num_units):
+      for i in range(self.num_units):
          self.ps.append(Perceptron(num_inputs, act_f))
 
    def activation(self, x):
@@ -154,20 +154,21 @@ class MLP:
 
          # Backpropagation
          predictions = out_second_lay
-         delta_out = (predictions - outputs[i])*self.l_out.gradient(act_second_lay)
-         delta1 = self.gradient(act_first_lay)*np.dot(self.l_out.w[1:,:], delta_out)
-         weight_change_second = -self.alpha*np.dot(delta1, out_first_lay)
-         weight_change_first = -self.alpha*np.dot(delta_out, out_first_lay)
+         print("predictions", predictions)
+         delta_out = (outputs[i]-predictions)*self.l_out.gradient(act_second_lay)
+         delta1 = self.l1.gradient(act_first_lay)*self.l_out.w*delta_out
+         weight_change = -self.alpha*delta1*out_first_lay
          weight_deltas.append(weight_change)
          # Add weight change contributions to temporary array
-      o0 = np.insert(o0, 0, 1)
-      o1 = np.insert(o1, 0, 1)
-
-      dw1 += delta1.reshape(-1,1).dot(o0.reshape(1,-1))
-      dw3 += delta_out.reshape(-1,1).dot(o1.reshape(1,-1))
+      print(weight_deltas)
+      weight_deltas_sum = np.sum(weight_deltas, axis=0)
+      print("weights sum" ,weight_deltas_sum)
+      #dw1 += delta1.reshape(-1,1).dot(o0.reshape(1,-1))
+      #dw3 += delta_out.reshape(-1,1).dot(o1.reshape(1,-1))
          
          # Update weights
-      
+      self.l1.update_weights(weight_deltas_sum)
+      #self.l1.w += np.array(weight_deltas)
       return None # remove this line
 
    def export_weights(self):
@@ -203,6 +204,7 @@ if __name__ == "__main__":
    num_of_units = 5
    activation_used = Sigmoid
    layer_test = Layer(num_of_inputs, num_of_units, activation_used)
+
 
    test_inputs = np.array([[np.pi, 1.0]])
    test_dims = test_inputs.shape
@@ -258,10 +260,27 @@ if __name__ == "__main__":
    print(f'MSE: {mse_result}')
 
    # TODO: Training data
+   xor_data = np.array([[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]])
+   xor_data_x = xor_data[:,0:2]
+   xor_data_y = xor_data[:,2]
+   xor_data_x_dims = xor_data_x.shape
+   xor_data_x = np.append(np.ones((xor_data_x_dims[0],1)), xor_data_x, axis=1)
+   xor_data_x_dims = xor_data_x.shape
+
+   num_of_inputs = xor_data_x_dims[1]
+   num_of_hidden_units = 2
+   num_of_outputs = 1
+
 
 
    # TODO: Initialization
-   a = 1
+   
+   mlp_xor = MLP(num_of_inputs, num_of_hidden_units, num_of_outputs)
+   print("Test data: ", xor_data)
+   print("Test data x: ", xor_data_x)
+   print("Test data y: ", xor_data_y)
+
+   mlp_xor.train(xor_data_x, xor_data_y)
 
    # TODO: Write a for loop to train the network for a number of iterations. Make plots.
    pass
