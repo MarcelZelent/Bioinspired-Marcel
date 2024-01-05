@@ -29,7 +29,7 @@ def initialize_robot(module=None):
     if module is None:
         module = moduleids[0]
     print('Found modules: ',moduleids)
-    api.setPos(-90,0, module)
+    api.setPos(-90,0, module)                               # You can set the starting position of the robot here
     api.sleep(0.5)
 
     return module
@@ -48,6 +48,9 @@ accurateY = 'HIGH'
 api.setAccurate(accurateX, accurateY, module)
 
 # TODO Load the trained model
+
+# You need to define the model architecture here again exactly as in the training script. Then load the weights.
+
 #model = torch_model.MLPNet(2, 16, 2)
 
 h = 100
@@ -60,7 +63,7 @@ model = nn.Sequential(nn.Flatten(),
                      nn.ReLU(),
                      nn.Linear(h,2))
 
-model.load_state_dict(torch.load('trained_model.pth'))
+model.load_state_dict(torch.load('trained_model.pth'))          # Load the weights
 
 # dummy class for targets
 class CoordinateStore:

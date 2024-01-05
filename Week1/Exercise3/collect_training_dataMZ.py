@@ -33,7 +33,7 @@ def initialize_robot(module=None):
     if module is None:
         module = moduleids[0]
     print('Found modules: ',moduleids)
-    api.setPos(0,0, module)
+    api.setPos(0,0, module)         # You can set the starting position of the robot here
     api.sleep(0.5)
     return module
 
@@ -49,20 +49,7 @@ module = initialize_robot()
 # 3. Save the data needed for the training
 
 
-#Create two files (if they were not already created) to collect data.
-if (not os.path.exists("xycoords_2.csv")):
-    f = open('xycoords_2.csv', 'w')
-    with f:
-        writer = csv.writer(f)
-        writer.writerows([["X","Y"]])
-    f.close()
-if (not os.path.exists("angles_2.csv")):
-    f = open('angles_2.csv','w')
-    with f:
-        writer = csv.writer(f)
-        writer.writerows([["Y_angle", "X_angle"]])
-    f.close()
-
+# Set the amount of datapoints to collect
 
 n_t1 = 20
 n_t2 = 20
@@ -92,13 +79,13 @@ class TestClass:
         x, y = ct.locate(img)
         tmeas1 = api.getPos(0,module)
         tmeas2 = api.getPos(1,module)
-        self.ourdata = np.array([tmeas1, tmeas2, x, y])
-        if (datetime.datetime.now() - self.time_of_move).total_seconds() > 2.0:
+        self.ourdata = np.array([tmeas1, tmeas2, x, y])     
+        if (datetime.datetime.now() - self.time_of_move).total_seconds() > 2.0:         # I dont understand why this needs to be here. That is why we gather the data before it
             if x is not None:
                 print(x, y)
                 tmeas1 = api.getPos(0,module)
                 tmeas2 = api.getPos(1,module)
-                self.data[self.i,:] = np.array([tmeas1, tmeas2, x, y])
+                self.data[self.i,:] = np.array([tmeas1, tmeas2, x, y])         # Something happens here
                 self.i += 1
 
                 # set new pos
@@ -112,12 +99,12 @@ class TestClass:
 
 test = TestClass(num_datapoints)
 
-ourdata = []
+ourdata = []        # Create a list to store our data in 
 
-for i in range(0, num_datapoints):
+for i in range(0, num_datapoints):      # Loop through the function that gives you x, y coordinates and the theta values
     values  = test.go()
-    api.sleep(2)
-    ourdata = np.append(ourdata, values)
+    api.sleep(2)                        # Let the robot rest for a bit in order to gather the data
+    ourdata = np.append(ourdata, values)    
 
     
 print(ourdata)
