@@ -35,6 +35,8 @@ print(device)
 x = torch.from_numpy(xydata).float()                        # Convert the data to tensors
 y = torch.from_numpy(angledata).float()
 
+print(x)
+
 if device == 'cuda':
     x = x.cuda()
     y = y.cuda()
@@ -43,24 +45,24 @@ if device == 'cuda':
     
 h = 100                                                     # Number of neurons in each hidden layer
 
-#model = torch_model.MLPNet(2, 16, 2)                       # If you want to use a MLP
+model = torch_model.MLPNet(2, 16, 2)                       # If you want to use a MLP
 
-model = nn.Sequential(nn.Flatten(),                         # Better performance reached with this model
-                     nn.Linear(2,h),
-                     nn.ReLU(),
-                     nn.Linear(h,h),
-                     nn.ReLU(),
-                     nn.Linear(h,h),
-                     nn.ReLU(),
-                     nn.Linear(h,2))
+# #model = nn.Sequential(nn.Flatten(),                         # Better performance reached with this model
+#                      nn.Linear(2,h),
+#                      nn.ReLU(),
+#                      nn.Linear(h,h),
+#                      nn.ReLU(),
+#                      nn.Linear(h,h),
+#                      nn.ReLU(),
+#                      nn.Linear(h,2))
 
 print(model)
 
-lr = 0.001                                                  # Choose Learning rate                                       
+lr = 0.01                                                  # Choose Learning rate                                       
 
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 loss_func = torch.nn.MSELoss()
-num_epochs = 500000                                         # Choose number of epochs                    
+num_epochs = 10000                                         # Choose number of epochs                    
 
 g = 0.999
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=100, gamma=g)
@@ -84,6 +86,18 @@ for t in tqdm(range(num_epochs)):
 
 plt.plot(l_vec)
 plt.yscale('log')
+
+angledata_test = test_set[:,0:2]                                # Split the data into the angle data and the xy data
+xydata_test = test_set[:,2:4]
+print("Angle data test: ", angledata_test)
+
+x_test = torch.from_numpy(xydata_test).float()                        # Convert the data to tensors
+
+prediction_test = model(x_test)
+print(prediction_test)
+loss_test = loss_func(prediction, y)
+l_test = loss_test.data
+print(l_test.numpy())
 
 np.savetxt("loss_plot.csv", l_vec, delimiter=",")           # Save the loss values to a file
 

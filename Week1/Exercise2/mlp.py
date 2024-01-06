@@ -12,7 +12,7 @@ class Sigmoid(ActivationFunction):
          Activation function output.
          TODO: Change the function to return the correct value, given input `x`.
       """
-      return No
+      return None
 
    def gradient(self, x):
       """
