@@ -13,6 +13,13 @@ from tqdm import tqdm # progress bar
 data_original = np.loadtxt("training_data.csv", ndmin=2)    # Load data from file. Order is [theta1, theta2, x, y]
 data_original = np.reshape(data_original,(-1,4))            # Reshape data to 4 columns since original data is all in 1 column
 
+data_before = data_original.copy()                          # Save a copy of the original data for later use
+
+# Standardize data
+
+# data_original = data_original - np.mean(data_original, axis=0) # Subtract mean from data
+# data_original = data_original/np.std(data_original, axis=0)    # Divide by standard deviation
+
 np.random.shuffle(data_original)                            # Shuffle the data in order to get red of any biases in the way data was collected
 
 train_set = data_original[:int(0.8*data_original.shape[0]),:]   # Split the data into a training set and a test set. Don't think its actually neeeded
@@ -35,7 +42,7 @@ print(device)
 x = torch.from_numpy(xydata).float()                        # Convert the data to tensors
 y = torch.from_numpy(angledata).float()
 
-print(x)
+#print(x)
 
 if device == 'cuda':
     x = x.cuda()
@@ -45,24 +52,24 @@ if device == 'cuda':
     
 h = 100                                                     # Number of neurons in each hidden layer
 
-model = torch_model.MLPNet(2, 16, 2)                       # If you want to use a MLP
+# model = torch_model.MLPNet(2, h, 2)                       # If you want to use a MLP
 
-# #model = nn.Sequential(nn.Flatten(),                         # Better performance reached with this model
-#                      nn.Linear(2,h),
-#                      nn.ReLU(),
-#                      nn.Linear(h,h),
-#                      nn.ReLU(),
-#                      nn.Linear(h,h),
-#                      nn.ReLU(),
-#                      nn.Linear(h,2))
+model = nn.Sequential(nn.Flatten(),                         # Better performance reached with this model
+                     nn.Linear(2,h),
+                     nn.ReLU(),
+                     nn.Linear(h,h),
+                     nn.ReLU(),
+                     nn.Linear(h,h),
+                     nn.ReLU(),
+                     nn.Linear(h,2))
 
 print(model)
 
-lr = 0.01                                                  # Choose Learning rate                                       
+lr = 0.00001                                                  # Choose Learning rate                                       
 
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 loss_func = torch.nn.MSELoss()
-num_epochs = 10000                                         # Choose number of epochs                    
+num_epochs = 500000                                        # Choose number of epochs                    
 
 g = 0.999
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=100, gamma=g)
@@ -85,19 +92,27 @@ for t in tqdm(range(num_epochs)):
     l_vec[t] = l.numpy()
 
 plt.plot(l_vec)
+plt.legend(['Training loss'])
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
 plt.yscale('log')
 
 angledata_test = test_set[:,0:2]                                # Split the data into the angle data and the xy data
 xydata_test = test_set[:,2:4]
 print("Angle data test: ", angledata_test)
 
-x_test = torch.from_numpy(xydata_test).float()                        # Convert the data to tensors
+x_test = torch.from_numpy(xydata_test).float()
+y_test = torch.from_numpy(angledata_test).float()                        # Convert the data to tensors
 
 prediction_test = model(x_test)
 print(prediction_test)
-loss_test = loss_func(prediction, y)
+loss_test = loss_func(prediction_test, y_test)
 l_test = loss_test.data
 print(l_test.numpy())
+
+# scaled_up = prediction_test.detach().numpy()*np.std(data_before[:,0:2], axis=0) + np.mean(data_before[:,0:2], axis=0)
+# loss_test_scaled = loss_func(scaled_up, torch.from_numpy(angledata_test).float()).data
+# print(loss_test_scaled.numpy())
 
 np.savetxt("loss_plot.csv", l_vec, delimiter=",")           # Save the loss values to a file
 
