@@ -87,3 +87,4 @@ trained_parameters = train_neural_network(inputs, outputs, hidden_size, learning
 # Test the trained neural network
 output_activation, _ = forward_propagation(inputs, trained_parameters)
 print(f'Output: {output_activation}')
+print("Final Weights: ", trained_parameters['weights_hidden'], trained_parameters['weights_output'])
