@@ -10,6 +10,9 @@ cam = ct.prepare_camera()
 print(cam.isOpened())  # False
 i = 0
 
+low_green = np.array([58, 86, 120])
+high_green = np.array([144, 111, 183])
+
 # Initialize the camera first.. waits for it to detect the green block
 def initialize_camera(cam):
     while True:
@@ -51,17 +54,17 @@ api.setAccurate(accurateX, accurateY, module)
 
 # You need to define the model architecture here again exactly as in the training script. Then load the weights.
 
-#model = torch_model.MLPNet(2, 16, 2)
+model = torch_model.MLPNet(2, 100, 2)
 
-h = 100
-model = nn.Sequential(nn.Flatten(),
-                     nn.Linear(2,h),
-                     nn.ReLU(),
-                     nn.Linear(h,h),
-                     nn.ReLU(),
-                     nn.Linear(h,h),
-                     nn.ReLU(),
-                     nn.Linear(h,2))
+# h = 100
+# model = nn.Sequential(nn.Flatten(),
+#                      nn.Linear(2,h),
+#                      nn.ReLU(),
+#                      nn.Linear(h,h),
+#                      nn.ReLU(),
+#                      nn.Linear(h,h),
+#                      nn.ReLU(),
+#                      nn.Linear(h,2))
 
 model.load_state_dict(torch.load('trained_model.pth'))          # Load the weights
 
@@ -86,11 +89,13 @@ coordinateStore1 = CoordinateStore()
 cv2.namedWindow("test")
 cv2.setMouseCallback('test', coordinateStore1.select_point)
 
+
+
 while True:
 
     frame = ct.capture_image(cam)
 
-    x, y = ct.locate(frame)
+    x, y = ct.locate(frame, low_green, high_green)
 
     cv2.imshow("test", frame)
     k = cv2.waitKey(500)

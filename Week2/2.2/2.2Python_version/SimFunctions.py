@@ -85,6 +85,6 @@ class SimulationFunctions:
         elbow_pos=[[self.le1*np.cos(ang[0])], [self.le1*np.sin(ang[0])]]
         p1=[[np.cos(ang[0]), -np.sin(ang[0])], [np.sin(ang[0]), np.cos(ang[0])]]
         p2=[[self.le2*np.cos(ang[1])], [self.le2*np.sin(ang[1])]]
-        wrist_pos=list(elbow_pos+np.matmul(np.array(p1),np.array(p2)))
+        wrist_pos=np.array(elbow_pos+np.matmul(np.array(p1),np.array(p2)))
 
         return elbow_pos, wrist_pos

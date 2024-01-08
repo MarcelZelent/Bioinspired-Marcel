@@ -13,9 +13,9 @@ dt=.01
 # Simulation duration
 L=6.0
 # Proportional parameter
-kp=200.0
+kp = 
 # Derivative parameter
-kd=11.0
+kd=5
 # Upper arm length
 le1=.3
 # Lower arm length
@@ -26,6 +26,7 @@ m1=3
 m2=3
 # Gravity
 g=-9.8
+
 
 ## Functions
 Var = [T,dt,L,kp,kd,le1,le2,m1,m2,g]
@@ -51,7 +52,7 @@ shoulder_pos=[0, 0]
 # Elbow position
 elbow_pos=[0, 0]
 # Wrist position
-wrist_pos=[0, 0]
+wrist_pos=np.zeros((2))
 wrist_pos_rec=np.zeros((int(L/dt+1),2))
 # Initial wrist position for current movement
 init_wrist_pos=wrist_pos
@@ -64,7 +65,7 @@ curr_target=0
 start_t=0
 
 # TODO define time steps of delay
-
+delay_time = 1
 ## Simulation
 
 ## Reset variables
@@ -100,14 +101,24 @@ for t in np.arange(0,int(L),dt):
 
         ## Inverse dynamics
         ## TODO Define delayed angles and velocities
+        if (round((t)/dt)) > delay_time:
+     
+            delayed_ang = ang_rec[round((t)/dt)-delay_time,:]
+            delayed_vel = vel_rec[round((t)/dt)-delay_time,:]
+      
         ## TODO Compute torque with delayed angles and velocities
+        desired_torque=Sim.pdcontroller(desired_ang, delayed_ang, delayed_vel)
 
         # Get desired torque from PD controller
-        desired_torque=Sim.pdcontroller(desired_ang, ang, vel)
+        # desired_torque=Sim.pdcontroller(desired_ang, ang, vel)
             
         ## Forward dynamics
         ## TODO DEFINE NOISE - you can use randn
+        # noise = np.random.randn(2)
+        # noise = 0
         ## TODO ADD NOISE to torque
+        # desired_torque = desired_torque +  noise
+
         # Pass torque to plant
         [ang,vel,acc]= Sim.plant(ang,vel,acc,desired_torque)
 
@@ -116,7 +127,8 @@ for t in np.arange(0,int(L),dt):
         [elbow_pos, wrist_pos] = Sim.fkinematics(ang)
 
         # Record wrist position
-        wrist_pos_rec[round(t/dt)+1,:]=wrist_pos
+        wrist_pos_rec[round(t/dt)+1,:]=wrist_pos.T
+        
 
         ## Next target
         if (t-start_t>=T+.02) & (curr_target<7):
@@ -126,26 +138,29 @@ for t in np.arange(0,int(L),dt):
         
     
 
-## Plot arm, wrist path, and targets -- ANIMATION 
+# # # Plot arm, wrist path, and targets -- ANIMATION 
 
-    #ax.cla()
-    #ax.scatter(np.array(final_wrist_pos)[:,0], np.array(final_wrist_pos)[:,1], color='green')
-    #ax1.scatter(np.array(final_wrist_pos)[:,0], np.array(final_wrist_pos)[:,1], color='green')
+    # print([shoulder_pos[0], elbow_pos[0][0]], [shoulder_pos[1], elbow_pos[1][0]])
+    # print([elbow_pos[0][0], wrist_pos[0]], [elbow_pos[1][0], wrist_pos[1]])
 
-    #ax.plot([shoulder_pos[0], elbow_pos[0][0]], [shoulder_pos[1], elbow_pos[1][0]], color='blue')
-    #ax.plot([elbow_pos[0][0], wrist_pos[0]], [elbow_pos[1][0], wrist_pos[1]], color= 'blue')   
-    #plt.pause(0.01)
-    # # plt.tight_layout()
+    # ax.cla()
+    # ax.scatter(np.array(final_wrist_pos)[:,0], np.array(final_wrist_pos)[:,1], color='green')
+    # ax.scatter(np.array(final_wrist_pos)[:,0], np.array(final_wrist_pos)[:,1], color='green')
 
-    #for t2 in np.arange(dt,t,dt):
-    #     # ax1.cla()
-         #ax.plot(wrist_pos_rec[:round(t2/dt),0], wrist_pos_rec[:round(t2/dt),1],'--',color='red',linewidth=0.5)
+    # ax.plot([shoulder_pos[0], elbow_pos[0][0]], [shoulder_pos[1], elbow_pos[1][0]], color='blue')
+    # ax.plot([elbow_pos[0][0], wrist_pos[0][0]], [elbow_pos[1][0], wrist_pos[1][0]], color= 'blue')   
+    # plt.pause(0.01)
+    # plt.tight_layout()
+
+    # for t2 in np.arange(dt,t,dt):
+    #     ax.cla()
+    #     ax.plot(wrist_pos_rec[:round(t2/dt),0], wrist_pos_rec[:round(t2/dt),1],'--',color='red',linewidth=0.5)
         
     #     ax.plot([wrist_pos_rec[round(t2/dt),0], wrist_pos_rec[round(t2/dt)+1,0]], [wrist_pos_rec[round(t2/dt),1], wrist_pos_rec[round(t2/dt)+1,1]],color='red',linewidth=0.5)
     #     plt.show(block=False)
-         #plt.pause(0.01)
+    #     plt.pause(0.01)
     #     ax.cla()
-    #ax.autoscale_view()
+    # ax.autoscale_view()
 
 elapsed = time.time() - Time
 print("Time elapsed:",elapsed)
