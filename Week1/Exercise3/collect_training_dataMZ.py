@@ -48,6 +48,8 @@ module = initialize_robot()
 # 2. Collect robot data and target data
 # 3. Save the data needed for the training
 
+low_green = np.array([69, 76, 131])
+high_green = np.array([151, 106, 197])
 
 # Set the amount of datapoints to collect
 
@@ -76,7 +78,7 @@ class TestClass:
             return True
         
         img = ct.capture_image(cam)
-        x, y = ct.locate(img)
+        x, y = ct.locate(img, low_green, high_green)
         tmeas1 = api.getPos(0,module)
         tmeas2 = api.getPos(1,module)
         self.ourdata = np.array([tmeas1, tmeas2, x, y])     
