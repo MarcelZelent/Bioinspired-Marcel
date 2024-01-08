@@ -13,9 +13,9 @@ dt=.01
 # Simulation duration
 L=6.0
 # Proportional parameter
-kp=200.0
+kp = 
 # Derivative parameter
-kd=11.0
+kd=5
 # Upper arm length
 le1=.3
 # Lower arm length
@@ -65,7 +65,7 @@ curr_target=0
 start_t=0
 
 # TODO define time steps of delay
-
+delay_time = 1
 ## Simulation
 
 ## Reset variables
@@ -101,17 +101,23 @@ for t in np.arange(0,int(L),dt):
 
         ## Inverse dynamics
         ## TODO Define delayed angles and velocities
+        if (round((t)/dt)) > delay_time:
+     
+            delayed_ang = ang_rec[round((t)/dt)-delay_time,:]
+            delayed_vel = vel_rec[round((t)/dt)-delay_time,:]
+      
         ## TODO Compute torque with delayed angles and velocities
+        desired_torque=Sim.pdcontroller(desired_ang, delayed_ang, delayed_vel)
 
         # Get desired torque from PD controller
-        desired_torque=Sim.pdcontroller(desired_ang, ang, vel)
+        # desired_torque=Sim.pdcontroller(desired_ang, ang, vel)
             
         ## Forward dynamics
         ## TODO DEFINE NOISE - you can use randn
-        noise = np.random.randn(2)
-        noise = 0
+        # noise = np.random.randn(2)
+        # noise = 0
         ## TODO ADD NOISE to torque
-        desired_torque = desired_torque +  noise
+        # desired_torque = desired_torque +  noise
 
         # Pass torque to plant
         [ang,vel,acc]= Sim.plant(ang,vel,acc,desired_torque)

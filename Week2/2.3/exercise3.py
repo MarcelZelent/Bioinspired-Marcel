@@ -16,7 +16,7 @@ g = 9.81
 dampCoeff =0.5
 # Sensory delay (s)
 delay =  0
-#delay =  0.1
+# delay =  0.1
 # Simulation time step (s)
 dt = 0.001
 # Simulation duration (s)
@@ -55,20 +55,20 @@ pert_start_time = 1.2
 # Perturbation end time (s)
 pert_end_time = 1.5
 # Perturbation amplitude
+# pert_amp = 1
 pert_amp =1
-#pert_amp =0
 
 # Gain and damping parameters for forward model
 Kp_forward = 5
-#Kp_forward = 0
+# Kp_forward = 0
 Kd_forward = 0.3
-#Kd_forward = 0
+# Kd_forward = 0
 
 # Gain and damping parameters for feedback model
-Kp_feedback = 5
-#Kp_feedback = 0
-Kd_feedback = 0.3
-#Kd_feedback = 0
+# Kp_feedback = 5
+Kp_feedback = 0
+# Kd_feedback = 0.3
+Kd_feedback = 0
 
 
 ## Simulation
