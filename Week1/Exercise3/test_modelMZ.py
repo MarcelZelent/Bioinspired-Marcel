@@ -10,8 +10,8 @@ cam = ct.prepare_camera()
 print(cam.isOpened())  # False
 i = 0
 
-low_green = np.array([69, 76, 131])
-high_green = np.array([151, 106, 197])
+low_green = np.array([58, 86, 120])
+high_green = np.array([144, 111, 183])
 
 # Initialize the camera first.. waits for it to detect the green block
 def initialize_camera(cam):

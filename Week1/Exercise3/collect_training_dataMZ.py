@@ -48,8 +48,10 @@ module = initialize_robot()
 # 2. Collect robot data and target data
 # 3. Save the data needed for the training
 
-low_green = np.array([69, 76, 131])
-high_green = np.array([151, 106, 197])
+
+
+low_green = np.array([58, 86, 120])
+high_green = np.array([144, 111, 183])
 
 # Set the amount of datapoints to collect
 

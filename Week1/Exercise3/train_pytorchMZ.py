@@ -65,7 +65,7 @@ model = torch_model.MLPNet(2, h, 2)                       # If you want to use a
 
 print(model)
 
-lr = 0.0001                                                  # Choose Learning rate                                       
+lr = 0.001                                                  # Choose Learning rate                                       
 
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 loss_func = torch.nn.MSELoss()
