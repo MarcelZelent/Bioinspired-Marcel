@@ -54,7 +54,7 @@ api.setAccurate(accurateX, accurateY, module)
 
 # You need to define the model architecture here again exactly as in the training script. Then load the weights.
 
-model = torch_model.MLPNet(2, 32, 2)
+model = torch_model.MLPNet(2, 100, 2)
 
 # h = 100
 # model = nn.Sequential(nn.Flatten(),

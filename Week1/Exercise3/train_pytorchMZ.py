@@ -50,7 +50,7 @@ if device == 'cuda':
 
 # Define neural network
     
-h = 32                                                     # Number of neurons in each hidden layer
+h = 100                                                     # Number of neurons in each hidden layer
 
 model = torch_model.MLPNet(2, h, 2)                       # If you want to use a MLP
 
@@ -65,11 +65,11 @@ model = torch_model.MLPNet(2, h, 2)                       # If you want to use a
 
 print(model)
 
-lr = 0.001                                                  # Choose Learning rate                                       
+lr = 0.01                                                  # Choose Learning rate                                       
 
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 loss_func = torch.nn.MSELoss()
-num_epochs = 200000                                        # Choose number of epochs                    
+num_epochs = 50000                                        # Choose number of epochs                    
 
 g = 0.999
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=100, gamma=g)
@@ -88,6 +88,8 @@ for t in tqdm(range(num_epochs)):
     l = loss.data
     if device == 'cuda':
         l = l.cpu()
+    if t % 1000 == 0:
+        print("Epoch ", t, "Loss: ", l.numpy())
     #print(l.numpy())
     l_vec[t] = l.numpy()
 
