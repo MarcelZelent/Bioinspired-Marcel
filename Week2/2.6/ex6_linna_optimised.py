@@ -8,7 +8,7 @@ from cmac2 import CMAC
 Ts = 1e-3
 T_end = 10 # in one trial
 n_steps = int(T_end/Ts) # in one trial
-n_trials = 10
+n_trials = 50
 
 plant = SingleLink(Ts)
 
@@ -45,6 +45,8 @@ i_low= 0
 
 epoch = 0.00
 e_vec = []
+mean_before = 0
+mean_vec = []
 ## Simulation loop
 for i in range(n_steps*n_trials):
     t = i*Ts
@@ -74,8 +76,10 @@ for i in range(n_steps*n_trials):
     plant.step(tau)
     
     err = error**2
-    e_vec.append(error**2)
-    mse = np.mean(e_vec)
+    mean_now = mean_before + (err - mean_before)/(i+1)
+    mean_before = mean_now
+    mean_vec.append(mean_now)
+    
     # print("e_vec",mse)
     
   
@@ -94,8 +98,8 @@ for i in range(n_steps*n_trials):
     #         print(mse)
     #         break
 
-    if i%1000 == 0:
-        print(i, mse)
+    if i%10000 == 0:
+        print(i, mean_now)
             
                 
             
@@ -123,8 +127,11 @@ for i in range(n_steps*n_trials):
 
 ## Plotting
 
+print("mean",mean_vec[-1])
+
 plt.plot(t_vec, theta_vec, label='theta')
 plt.plot(t_vec, theta_ref_vec, '--', label='reference')
+plt.plot(t_vec, mean_vec, label='error')
 plt.legend()
 
 ## Plot trial error
