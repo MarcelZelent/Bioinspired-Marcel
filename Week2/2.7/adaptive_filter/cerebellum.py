@@ -31,6 +31,8 @@ class AdaptiveFilterCerebellum:
         # Update error signal and weights
         self._update_weights(error) # update before or after calc?
 
+        self.C = float(self.C)
+
         return self.C
 
 

@@ -8,14 +8,14 @@ Ts = 1e-3
 n_inputs = 1
 n_outputs = 1
 n_bases = 50
-beta = 1e-6
+beta = 1e-7
 
 c = AdaptiveFilterCerebellum(Ts, n_inputs, n_outputs, n_bases, beta)
 
 ## Initialize simulation
 T_end = 10 # in one trial
 n_steps = int(T_end/Ts) # in one trial
-n_trials = 10
+n_trials = 25
 
 plant = SingleLink(Ts)
 
@@ -41,6 +41,13 @@ epoch = 0.00
 e_vec = np.zeros(n_steps*n_trials)
 af_out_vec = []
 e_vec_sq = np.zeros(n_steps*n_trials)
+
+mean_before = 0
+mean_vec = []
+
+rate = 10000
+
+
 ## Simulation loop
 for i in range(n_steps*n_trials):
     t = i*Ts
@@ -52,7 +59,7 @@ for i in range(n_steps*n_trials):
 
     # print(theta)
 
-    theta_vec[i] = theta
+    theta_vec[i] = float(theta)
     theta_ref_vec[i] = theta_ref
 
     # Feedback controler
@@ -67,8 +74,16 @@ for i in range(n_steps*n_trials):
 
     plant.step(u)
     
-    e_vec_sq[i] = np.square(error)
-    e_vec[i] = np.sum(e_vec_sq[0:i+1])/(i+1)
+    # e_vec_sq[i] = np.square(error)
+    # e_vec[i] = np.sum(e_vec_sq[0:i+1])/(i+1)
+
+    err = error**2
+    mean_now = mean_before + (err - mean_before)/(i+1)
+    mean_before = mean_now
+    mean_vec.append(mean_now)
+
+    if i%rate == 0:
+        print(i/rate, mean_now)
 
 
     epoch = epoch +1
@@ -77,7 +92,7 @@ for i in range(n_steps*n_trials):
     
 plt.plot(t_vec, theta_vec, label='theta')
 plt.plot(t_vec, theta_ref_vec, '--', label='reference')
-plt.plot(t_vec, e_vec, label='error')
+plt.plot(t_vec, mean_vec, label='error')
 plt.ylim([-A*2, A*2])
 plt.legend()
 plt.show()

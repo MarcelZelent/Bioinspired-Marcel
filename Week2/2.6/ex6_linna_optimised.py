@@ -8,7 +8,7 @@ from cmac2 import CMAC
 Ts = 1e-3
 T_end = 10 # in one trial
 n_steps = int(T_end/Ts) # in one trial
-n_trials = 50
+n_trials = 30
 
 plant = SingleLink(Ts)
 
@@ -21,8 +21,8 @@ theta_ref_vec = np.zeros(n_steps*n_trials)
 ## Feedback controller variables
 # Kp = 150
 # Kv = 3
-Kp = 20
-Kv = 3
+Kp = 10
+Kv = 0
 # Kp=50
 # Kv=1
 
@@ -38,7 +38,7 @@ n_rfs = 11
 xmin = [-np.pi,-np.pi]
 xmax = [np.pi, np.pi]
 
-c = CMAC(n_rfs, xmin, xmax, 1e-6)
+c = CMAC(n_rfs, xmin, xmax, 0.01)
 
 flag = 0
 i_low= 0
@@ -47,6 +47,9 @@ epoch = 0.00
 e_vec = []
 mean_before = 0
 mean_vec = []
+
+rate = 10000
+
 ## Simulation loop
 for i in range(n_steps*n_trials):
     t = i*Ts
@@ -68,7 +71,7 @@ for i in range(n_steps*n_trials):
     x = [theta_ref,theta]
     tau_cmac = c. predict(x)
     # print("cmac",tau_cmac)
-    tau = tau_m #+ tau_cmac
+    tau = tau_m + tau_cmac
     # print("taum",tau_m)
     # print("tau",tau)
     # Iterate simulation dynamics
@@ -98,8 +101,8 @@ for i in range(n_steps*n_trials):
     #         print(mse)
     #         break
 
-    if i%10000 == 0:
-        print(i, mean_now)
+    if i%rate == 0:
+        print(i/rate, mean_now)
             
                 
             
