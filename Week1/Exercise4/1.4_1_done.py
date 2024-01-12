@@ -71,4 +71,4 @@ for I in list(np.arange(0,5.5e-9, 0.5e-9)):
 plt.plot(list(np.arange(0,5.5e-9, 0.5e-9)), spikes)
 plt.xlabel('Constant current')
 plt.ylabel('Spiking frequency')
-#plt.show()
+plt.show()
