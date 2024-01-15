@@ -6,7 +6,6 @@ dependencies:
 - numpy
 - scipy
 - matplotlib
-- nb_conda
 - pip
 - psutil
 - pylint
