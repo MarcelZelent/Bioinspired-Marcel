@@ -8,7 +8,7 @@ from cmac2 import CMAC
 Ts = 1e-3
 T_end = 10 # in one trial
 n_steps = int(T_end/Ts) # in one trial
-n_trials = 30
+n_trials = 5
 
 plant = SingleLink(Ts)
 
@@ -19,7 +19,7 @@ theta_vec = np.zeros(n_steps*n_trials)
 theta_ref_vec = np.zeros(n_steps*n_trials)
 
 ## Feedback controller variables
-Kp = 10
+Kp = 5
 Kv = 0
 
 
@@ -28,14 +28,15 @@ A = np.pi
 T = 5
 t = Ts
 theta_ref = A * np.sin(2*np.pi * t/T)
+theta_ref = A
 
 ## TODO: CMAC initialization
-n_rfs = 11
+n_rfs = 10
 
 xmin = [-np.pi,-np.pi]
 xmax = [np.pi, np.pi]
 
-c = CMAC(n_rfs, xmin, xmax, 0.01)
+c = CMAC(n_rfs, xmin, xmax, 0.1)
 
 flag = 0
 i_low= 0
@@ -53,6 +54,7 @@ for i in range(n_steps*n_trials):
     ## TODO: Calculate the reference at this time step
     # theta_ref = np.pi/4
     theta_ref = A * np.sin(2*np.pi * t/T)
+    theta_ref = A
     
     
     # Measure

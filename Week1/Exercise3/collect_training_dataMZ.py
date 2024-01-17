@@ -64,6 +64,8 @@ thetas = np.stack((t1,t2))
 
 num_datapoints = n_t1*n_t2
 
+
+
 api.setPos(thetas[0,i], thetas[1,i], module)
 
 class TestClass:
