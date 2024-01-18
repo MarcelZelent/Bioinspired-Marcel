@@ -4,18 +4,18 @@ import matplotlib.pyplot as plt
 from adaptive_filter.cerebellum import AdaptiveFilterCerebellum
 from robot import SingleLink
 
-Ts = 1e-3
+Ts = 1e-4
 n_inputs = 1
 n_outputs = 1
-n_bases = 50
-beta = 1e-7
+n_bases = 1
+beta = 1e-8
 
 c = AdaptiveFilterCerebellum(Ts, n_inputs, n_outputs, n_bases, beta)
 
 ## Initialize simulation
 T_end = 10 # in one trial
 n_steps = int(T_end/Ts) # in one trial
-n_trials = 25
+n_trials = 5
 
 plant = SingleLink(Ts)
 
